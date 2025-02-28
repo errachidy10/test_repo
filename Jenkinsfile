@@ -1,20 +1,31 @@
 pipeline {
     agent any
+
+    tools {
+        // Assurez-vous d'avoir configuré JDK 21 dans Jenkins
+        jdk 'JDK21'
+        maven 'mvn'
+    }
+
     stages {
         stage('Build') {
             steps {
-                echo 'Building...'
+                sh 'mvn clean install'
             }
         }
-        stage('Test') {
+        stage('SonarQube analysis') {
             steps {
-                echo 'Testing...'
+                withSonarQubeEnv('SonarQube') {
+                    sh 'mvn sonar:sonar'
+                }
             }
         }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying...'
-            }
+    }
+
+    post {
+        always {
+            junit '**/target/surefire-reports/*.xml'
+            archiveArtifacts artifacts: '**/target/*.jar', allowEmptyArchive: true
         }
     }
 }
