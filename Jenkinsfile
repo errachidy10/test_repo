@@ -8,13 +8,13 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh 'mvn clean package'
+                bat 'mvn clean package' // Utilisez 'bat' au lieu de 'sh' pour Windows
             }
         }
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarQube') {
-                    sh 'mvn sonar:sonar'
+                    bat 'mvn sonar:sonar' // Utilisez 'bat' au lieu de 'sh' pour Windows
                 }
             }
         }
