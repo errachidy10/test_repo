@@ -3,7 +3,6 @@ pipeline {
 
     tools {
         // Assurez-vous d'avoir configuré JDK 21 dans Jenkins
-        jdk 'JDK21'
         maven 'mvn'
     }
 
