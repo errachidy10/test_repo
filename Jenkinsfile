@@ -3,19 +3,24 @@ pipeline {
 
     tools {
         // Assurez-vous d'avoir configuré JDK 21 dans Jenkins
-        maven 'mvn'
+        jdk 'JDK21'
+        maven 'Maven3'
+    }
+
+    environment {
+        MAVEN_OPTS = '-Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true'
     }
 
     stages {
         stage('Build') {
             steps {
-                sh 'mvn clean install'
+                bat 'mvn clean install'
             }
         }
         stage('SonarQube analysis') {
             steps {
                 withSonarQubeEnv('SonarQube') {
-                    sh 'mvn sonar:sonar'
+                    bat 'mvn sonar:sonar'
                 }
             }
         }
