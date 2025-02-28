@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/errachidy10/test_repo.git'
+                git branch: 'main', url: 'https://github.com/errachidy10/test_repo.git'
             }
         }
         stage('Build') {
@@ -13,7 +13,7 @@ pipeline {
         }
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('sonarqube') {
+                withSonarQubeEnv('SonarQube') {
                     sh 'mvn sonar:sonar'
                 }
             }
