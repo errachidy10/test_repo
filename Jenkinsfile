@@ -1,34 +1,22 @@
 pipeline {
     agent any
-
-    tools {
-        // Assurez-vous d'avoir configuré JDK 21 dans Jenkins
-        maven 'mvn'
-    }
-
-    environment {
-        MAVEN_OPTS = '-Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true'
-    }
-
     stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/errachidy10/test_repo.git'
+            }
+        }
         stage('Build') {
             steps {
-                bat 'mvn clean install'
+                sh 'mvn clean package'
             }
         }
-        stage('SonarQube analysis') {
+        stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('SonarQube') {
-                    bat 'mvn sonar:sonar'
+                withSonarQubeEnv('sonarqube') {
+                    sh 'mvn sonar:sonar'
                 }
             }
-        }
-    }
-
-    post {
-        always {
-            junit '**/target/surefire-reports/*.xml'
-            archiveArtifacts artifacts: '**/target/*.jar', allowEmptyArchive: true
         }
     }
 }
